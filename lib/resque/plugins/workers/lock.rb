@@ -4,7 +4,7 @@ module Resque
   alias_method :orig_remove_queue, :remove_queue
 
   def remove_queue(queue)
-    Resque.redis.keys('workerslock:*').each{ |x| Resque.redis.del(x) }
+    Resque.redis.redis.keys('workerslock:*').each{ |x| Resque.redis.redis.del(x) }
     orig_remove_queue(queue)
   end
 
@@ -63,7 +63,7 @@ module Resque
           lock_result = get_lock_workers(*args)
 
           lock_result.each do |lock|
-            Resque.redis.del(lock)
+            Resque.redis.redis.del(lock)
           end
         end
 
